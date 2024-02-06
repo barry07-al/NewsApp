@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -35,15 +34,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
 import dataclass.Article
+import repositories.FavouriteNewsRepository
 
 @Composable
-fun NewScreen(article: Article, onBackClicked: () -> Unit){
+fun NewScreen(
+    article: Article,
+    onBackClicked: () -> Unit,
+    favouriteNewsRepository: FavouriteNewsRepository
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,14 +75,14 @@ fun NewScreen(article: Article, onBackClicked: () -> Unit){
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            NewBodyScreen(article)
+            NewBodyScreen(article, favouriteNewsRepository)
         }
     }
 }
 
 @Composable
-fun NewBodyScreen(article: Article) {
-    val isArticleSaved = remember { mutableStateOf(false) }
+fun NewBodyScreen(article: Article, favouriteNewsRepository: FavouriteNewsRepository) {
+    val isFavourite = remember { mutableStateOf(favouriteNewsRepository.isFavourite(article)) }
 
     Surface(color = MaterialTheme.colors.background) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -109,10 +110,20 @@ fun NewBodyScreen(article: Article) {
                     IconButton(onClick = { /* Implémentez la logique de partage ici */ }) {
                         Icon(Icons.Default.Share, contentDescription = "shared article")
                     }
-                    IconButton(onClick = { isArticleSaved.value = !isArticleSaved.value }) {
+                    IconButton(
+                        onClick = {
+                            if (isFavourite.value) {
+                                favouriteNewsRepository.removeFavourite(article)
+                            } else {
+                                favouriteNewsRepository.addFavourite(article)
+                            }
+                            isFavourite.value = !isFavourite.value
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Favorite,
-                            contentDescription = if (isArticleSaved.value) "removed to saved" else "save article",
+                            tint = if (isFavourite.value) Color.Red else Color.Black,
+                            contentDescription = if (isFavourite.value) "removed to saved" else "save article",
                         )
                     }
                 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dataclass.Article
+import repositories.FavouriteNewsRepository
 import repositories.NewsRepository
 import response.ArticleResponse
 
@@ -26,8 +27,8 @@ fun SearchResultsScreen(
     keyword: String,
     onBackClicked: () -> Unit,
     onSelectArticle: (Article) -> Unit,
+    favouriteNewsRepository: FavouriteNewsRepository
 ) {
-    // articleResponse = newsRepository.fetchSearchResults(keyword);
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,7 +60,7 @@ fun SearchResultsScreen(
                 .padding(innerPadding)
         ) {
             TitleComposable(title = keyword)
-            BodyContent(articleResponse, onSelectArticle)
+            BodyContent(articleResponse, onSelectArticle, favouriteNewsRepository)
         }
     }
 }

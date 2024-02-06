@@ -7,6 +7,7 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import response.ArticleResponse
+import response.SourceResponse
 
 class NewsAPI {
 
@@ -19,7 +20,8 @@ class NewsAPI {
                 json = Json {
                     ignoreUnknownKeys = true
                     useAlternativeNames = false
-                })
+                }
+            )
         }
     }
 
@@ -29,4 +31,6 @@ class NewsAPI {
     suspend fun getEverything(query: String): ArticleResponse =
         httpClient.get("$url/everything?q=$query&apiKey=$key").body()
 
+    suspend fun getSources(): SourceResponse =
+        httpClient.get("$url/sources?country=us&apiKey=$key").body()
 }

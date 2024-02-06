@@ -37,7 +37,6 @@ fun AppHeader(
 ) {
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
     val showSearch = remember { mutableStateOf(false) }
-    //selectedCategory = remember { mutableStateOf(NewsCategory.GENERAL) }
 
     Column {
         TopAppBar(

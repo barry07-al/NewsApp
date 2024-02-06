@@ -10,6 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import enumdata.NewsCategory
 import moe.tlaster.precompose.navigation.Navigator
+import repositories.FavouriteNewsRepository
 
 @Composable
 fun NewsScreen(
@@ -17,7 +18,8 @@ fun NewsScreen(
     articleResponse: ArticleResponse,
     onSelectArticle: (Article) -> Unit,
     searchKeyword: MutableState<String?>,
-    selectedCategory: MutableState<NewsCategory>
+    selectedCategory: MutableState<NewsCategory>,
+    favouriteNewsRepository: FavouriteNewsRepository
 ) {
     Scaffold(
         topBar = {
@@ -34,8 +36,7 @@ fun NewsScreen(
                     .padding(innerPadding)
             ) {
                 TitleComposable(title = "Top Headlines: ${selectedCategory.value.name.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}")
-                BodyContent(articleResponse, onSelectArticle)
-
+                BodyContent(articleResponse, onSelectArticle, favouriteNewsRepository)
             }
     }
 }

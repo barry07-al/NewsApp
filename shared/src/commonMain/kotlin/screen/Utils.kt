@@ -22,6 +22,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,10 +37,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.seiko.imageloader.rememberImagePainter
 import dataclass.Article
+import repositories.FavouriteNewsRepository
 import response.ArticleResponse
 
 @Composable
-fun BodyContent(articleResponse: ArticleResponse, onSelectArticle: (Article) -> Unit) {
+fun BodyContent(
+    articleResponse: ArticleResponse,
+    onSelectArticle: (Article) -> Unit,
+    favouriteNewsRepository: FavouriteNewsRepository
+) {
     val articles = articleResponse.articles
     Column(
         modifier = Modifier
@@ -46,7 +55,7 @@ fun BodyContent(articleResponse: ArticleResponse, onSelectArticle: (Article) -> 
         val filteredArticles = articles.filter { it.title != "[Removed]"}  // Filter out articles with no image
         LazyColumn {
             items(filteredArticles) { article ->
-                ArticleCard(article, onSelectArticle)
+                ArticleCard(article, onSelectArticle, favouriteNewsRepository)
             }
         }
     }
@@ -62,7 +71,12 @@ fun TitleComposable(title: String) {
 }
 
 @Composable
-fun ArticleCard(article: Article, onSelectArticle: (Article) -> Unit) {
+fun ArticleCard(
+    article: Article,
+    onSelectArticle: (Article) -> Unit,
+    favouriteNewsRepository: FavouriteNewsRepository
+) {
+    var isFavourite by remember { mutableStateOf(favouriteNewsRepository.isFavourite(article)) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,11 +116,22 @@ fun ArticleCard(article: Article, onSelectArticle: (Article) -> Unit) {
                         color = MaterialTheme.colors.onSurface,
                         modifier = Modifier.weight(1f)
                     )
-                    IconButton(onClick = { /**onAddToFavorites(article)*/ }) {
+                    IconButton(
+                        onClick = {
+                            isFavourite = if (isFavourite) {
+                                favouriteNewsRepository.removeFavourite(article)
+                                false
+                            } else {
+                                favouriteNewsRepository.addFavourite(article)
+                                true
+                            }
+                        }
+
+                    ) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Ajouter aux favoris",
-                            tint = Color.Black
+                            tint = if (isFavourite) Color.Red else Color.Black
                         )
                     }
                 }

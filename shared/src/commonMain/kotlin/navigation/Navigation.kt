@@ -5,11 +5,13 @@ import dataclass.Article
 import enumdata.NewsCategory
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
+import repositories.FavouriteNewsRepository
 import repositories.NewsRepository
 import screen.*
 
 
-val newsRepository = NewsRepository()
+val newsRepository = NewsRepository.getInstance()
+val favouritesRepository = FavouriteNewsRepository.getInstance()
 
 @Composable
 fun Navigation() {
@@ -17,6 +19,7 @@ fun Navigation() {
     val selectedArticle = remember { mutableStateOf<Article?>(null) }
     val searchKeyword = remember { mutableStateOf<String?>(null) }
     val selectedCategory = remember { mutableStateOf(NewsCategory.GENERAL) }
+
 
     LaunchedEffect(selectedCategory.value) {
         newsRepository.fetchTopHeadlines(selectedCategory.value.name.lowercase())
@@ -40,7 +43,8 @@ fun Navigation() {
                         navigator.navigate("/newScreen")
                     },
                     searchKeyword = searchKeyword,
-                    selectedCategory = selectedCategory
+                    selectedCategory = selectedCategory,
+                    favouriteNewsRepository = favouritesRepository
                 )
             }
         }
@@ -50,7 +54,8 @@ fun Navigation() {
                     article,
                     onBackClicked = {
                         navigator.popBackStack()
-                    }
+                    },
+                    favouriteNewsRepository = favouritesRepository
                 )
             }
         }
@@ -67,21 +72,23 @@ fun Navigation() {
                         onSelectArticle = { article ->
                             selectedArticle.value = article
                             navigator.navigate("/newScreen")
-                        }
+                        },
+                        favouriteNewsRepository = favouritesRepository
                     )
                 }
             }
         }
         scene(route = "/favouriteNewsScreen") {
             FavouritesResultsScreen(
-                articleResponse = fakeData(),
+                articleResponse = favouritesRepository.favouriteNewsResponse.collectAsState().value!!,
                 onBackClicked = {
                     navigator.popBackStack()
                 },
                 onSelectArticle = { article ->
                     selectedArticle.value = article
                     navigator.navigate("/newScreen")
-                }
+                },
+                favouriteNewsRepository = favouritesRepository
             )
         }
     }

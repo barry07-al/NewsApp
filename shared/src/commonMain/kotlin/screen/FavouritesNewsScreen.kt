@@ -18,11 +18,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dataclass.Article
+import repositories.FavouriteNewsRepository
 import response.ArticleResponse
 
 @Composable
-fun FavouritesResultsScreen(articleResponse: ArticleResponse, onBackClicked: () -> Unit, onSelectArticle: (Article) -> Unit) {
-    // val articles = articleResponse.articles
+fun FavouritesResultsScreen(
+    articleResponse: ArticleResponse,
+    onBackClicked: () -> Unit,
+    onSelectArticle: (Article) -> Unit,
+    favouriteNewsRepository: FavouriteNewsRepository
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,7 +58,7 @@ fun FavouritesResultsScreen(articleResponse: ArticleResponse, onBackClicked: () 
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            BodyContent(articleResponse, onSelectArticle)
+            BodyContent(articleResponse, onSelectArticle, favouriteNewsRepository)
         }
     }
 }
