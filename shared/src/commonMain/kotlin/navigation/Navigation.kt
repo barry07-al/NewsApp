@@ -2,6 +2,7 @@ package navigation
 
 import androidx.compose.runtime.*
 import dataclass.Article
+import dataclass.SourceData
 import enumdata.NewsCategory
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
@@ -19,10 +20,19 @@ fun Navigation() {
     val selectedArticle = remember { mutableStateOf<Article?>(null) }
     val searchKeyword = remember { mutableStateOf<String?>(null) }
     val selectedCategory = remember { mutableStateOf(NewsCategory.GENERAL) }
+    val selectedSource = remember { mutableStateOf<SourceData?>(null) }
 
 
     LaunchedEffect(selectedCategory.value) {
         newsRepository.fetchTopHeadlines(selectedCategory.value.name.lowercase())
+        newsRepository.fetchSources(selectedCategory.value.name.lowercase())
+    }
+
+    LaunchedEffect(selectedSource.value) {
+        selectedSource.value?.let {
+            newsRepository.fetchTopHeadlinesByCategoryAndSource(
+                selectedCategory.value.name.lowercase(), it.id)
+        }
     }
 
     LaunchedEffect(searchKeyword.value) {
@@ -38,9 +48,13 @@ fun Navigation() {
                 NewsScreen(
                     navigator = navigator,
                     articleResponse = articleResponse,
+                    sourceResponse = newsRepository.sourceResponse.collectAsState().value ?: fakeSourceData(),
                     onSelectArticle = { article ->
                         selectedArticle.value = article
                         navigator.navigate("/newScreen")
+                    },
+                    onsourceSelected = { source ->
+                        selectedSource.value = source
                     },
                     searchKeyword = searchKeyword,
                     selectedCategory = selectedCategory,

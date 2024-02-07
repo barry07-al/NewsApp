@@ -1,5 +1,6 @@
 package dataclass
 
+@kotlinx.serialization.Serializable
 data class SourceData(
     val id: String,
     val name: String,

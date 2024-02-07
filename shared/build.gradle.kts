@@ -40,6 +40,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("androidx.compose.material:material:1.6.0")
+                implementation("androidx.compose.material:material-icons-extended:1.6.0")
                 api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.10.0")

@@ -4,7 +4,6 @@ import dataclass.Article
 import datasources.MockDataSourceFavourites
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import response.ArticleResponse
 
 import kotlinx.coroutines.*
@@ -31,7 +30,7 @@ class FavouriteNewsRepository {
         updateFavouritesNews()
     }
 
-    fun updateFavouritesNews(){
+    private fun updateFavouritesNews(){
         coroutineScope.launch {
             favouriteNewsResponse.update { getNewsFavourites()}
         }

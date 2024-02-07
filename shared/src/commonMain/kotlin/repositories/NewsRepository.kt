@@ -1,7 +1,6 @@
 package repositories
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import network.NewsAPI
 import response.ArticleResponse
 import response.SourceResponse
@@ -9,10 +8,10 @@ import response.SourceResponse
 class NewsRepository {
     private val newsAPI = NewsAPI()
     private val _newsResponse = MutableStateFlow<ArticleResponse?>(null)
-    val newsResponse: StateFlow<ArticleResponse?> = _newsResponse
+    val newsResponse = _newsResponse
 
     private val _searchResponse = MutableStateFlow<ArticleResponse?>(null)
-    val searchResponse: StateFlow<ArticleResponse?> = _searchResponse
+    val searchResponse =  _searchResponse
 
     private val _sourceResponse = MutableStateFlow<SourceResponse?>(null)
     val sourceResponse = _sourceResponse
@@ -37,8 +36,13 @@ class NewsRepository {
         _searchResponse.value = response
     }
 
-    suspend fun fetchSources() {
-        val response = newsAPI.getSources()
+    suspend fun fetchSources(category: String) {
+        val response = newsAPI.getSources(category)
         _sourceResponse.value = response
+    }
+
+    suspend fun fetchTopHeadlinesByCategoryAndSource(category: String, source: String) {
+        val response = newsAPI.getTopHeadlinesByCategoryAndSource(category, source)
+        _newsResponse.value = response
     }
 }
