@@ -10,13 +10,13 @@ import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun FavouriteView(navigator: Navigator) {
-        IconButton(onClick = {
-            navigator.navigate("/favouriteNewsScreen")
-        }) {
-            Icon(
-                Icons.Default.Favorite,
-                contentDescription = "Saved Articles",
-                tint = Color.White
-            )
-        }
+    IconButton(onClick = {
+        navigator.navigate("/favouriteNewsScreen")
+    }) {
+        Icon(
+            Icons.Default.Favorite,
+            contentDescription = "Saved Articles",
+            tint = Color.White
+        )
+    }
 }

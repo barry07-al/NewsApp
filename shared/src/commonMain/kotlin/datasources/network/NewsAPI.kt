@@ -1,4 +1,4 @@
-package network
+package datasources.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -31,10 +31,13 @@ class NewsAPI {
     suspend fun getEverything(query: String): ArticleResponse =
         httpClient.get("$url/everything?q=$query&apiKey=$key").body()
 
-    suspend fun getSources(category: String): SourceResponse =
-        httpClient.get("$url/top-headlines/sources?category=$category&country=us&apiKey=$key").body()
+    suspend fun getSources(): SourceResponse =
+        httpClient.get("$url/top-headlines/sources?&country=us&apiKey=$key").body()
 
-    suspend fun getTopHeadlinesByCategoryAndSource(category: String, source: String): ArticleResponse =
-        httpClient.get("$url/top-headlines?category=$category&source=$source&country=us&apiKey=$key").body()
+    suspend fun getTopHeadlinesByCategoryAndCountry(category: String, countryCode: String): ArticleResponse =
+        httpClient.get("$url/top-headlines?category=$category&country=$countryCode&apiKey=$key").body()
+
+    suspend fun getTopHeadlinesBySource(sourceId: String): ArticleResponse =
+        httpClient.get("$url/top-headlines?sources=$sourceId&apiKey=$key").body()
 
 }

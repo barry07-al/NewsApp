@@ -62,15 +62,11 @@ fun SearchView(state: MutableState<TextFieldValue>, onSearchSubmit: (String) -> 
             }
         },
         singleLine = true,
-        shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
             textColor = Color.White,
             cursorColor = Color.White,
             leadingIconColor = Color.White,
             trailingIconColor = Color.White,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
         )
     )
 }

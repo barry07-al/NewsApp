@@ -9,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.unit.dp
 import dataclass.SourceData
 import enumdata.NewsCategory
 import moe.tlaster.precompose.navigation.Navigator
@@ -23,14 +21,16 @@ fun NewsScreen(
     articleResponse: ArticleResponse,
     sourceResponse: SourceResponse,
     onSelectArticle: (Article) -> Unit,
-    onsourceSelected: (SourceData) -> Unit,
     searchKeyword: MutableState<String?>,
     selectedCategory: MutableState<NewsCategory>,
-    favouriteNewsRepository: FavouriteNewsRepository
+    selectedSource: MutableState<SourceData?>,
+    favouriteNewsRepository: FavouriteNewsRepository,
+    onCountrySelected: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
-            AppHeader(navigator, searchKeyword, selectedCategory)
+            AppHeader(
+                navigator, searchKeyword, selectedCategory, selectedSource, sourceResponse)
         },
         bottomBar = {
             AppFooter()
@@ -48,8 +48,12 @@ fun NewsScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TitleComposable(title = selectedCategory.value.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() })
-                    FilterBySource(sourceResponse, onsourceSelected)
+                    if (selectedSource.value == null) {
+                        TitleComposable(title = selectedCategory.value.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() })
+                        FilterByCountry(onCountrySelected)
+                    } else {
+                        TitleComposable(title = ("Source: " + selectedSource.value?.name) ?: "Source unknown")
+                    }
                 }
                 BodyContent(articleResponse, onSelectArticle, favouriteNewsRepository)
             }

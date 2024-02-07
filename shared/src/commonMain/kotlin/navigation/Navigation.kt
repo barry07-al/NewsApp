@@ -21,17 +21,29 @@ fun Navigation() {
     val searchKeyword = remember { mutableStateOf<String?>(null) }
     val selectedCategory = remember { mutableStateOf(NewsCategory.GENERAL) }
     val selectedSource = remember { mutableStateOf<SourceData?>(null) }
+    val selectedCountry = remember { mutableStateOf<String?>(null) }
 
 
     LaunchedEffect(selectedCategory.value) {
         newsRepository.fetchTopHeadlines(selectedCategory.value.name.lowercase())
-        newsRepository.fetchSources(selectedCategory.value.name.lowercase())
+    }
+
+    LaunchedEffect(Unit) {
+        newsRepository.fetchSources()
     }
 
     LaunchedEffect(selectedSource.value) {
         selectedSource.value?.let {
-            newsRepository.fetchTopHeadlinesByCategoryAndSource(
-                selectedCategory.value.name.lowercase(), it.id)
+            newsRepository.fetchTopHeadlinesBySource(it.id)
+        }
+    }
+
+    LaunchedEffect(selectedCountry.value) {
+        selectedCountry.value?.let {
+            newsRepository.fetchTopHeadlinesByCategoryAndCountry(
+                selectedCategory.value.name.lowercase(),
+                it
+            )
         }
     }
 
@@ -53,12 +65,13 @@ fun Navigation() {
                         selectedArticle.value = article
                         navigator.navigate("/newScreen")
                     },
-                    onsourceSelected = { source ->
-                        selectedSource.value = source
-                    },
                     searchKeyword = searchKeyword,
                     selectedCategory = selectedCategory,
-                    favouriteNewsRepository = favouritesRepository
+                    favouriteNewsRepository = favouritesRepository,
+                    selectedSource = selectedSource,
+                    onCountrySelected = { country ->
+                        selectedCountry.value = country
+                    }
                 )
             }
         }

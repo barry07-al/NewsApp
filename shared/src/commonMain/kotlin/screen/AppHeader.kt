@@ -26,14 +26,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
+import dataclass.SourceData
 import moe.tlaster.precompose.navigation.Navigator
+import response.SourceResponse
 
 
 @Composable
 fun AppHeader(
     navigator: Navigator,
     searchKeyword: MutableState<String?>,
-    selectedCategory: MutableState<NewsCategory>
+    selectedCategory: MutableState<NewsCategory>,
+    sourceSelected: MutableState<SourceData?>,
+    sourceResponse: SourceResponse,
 ) {
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
     val showSearch = remember { mutableStateOf(false) }
@@ -72,9 +76,11 @@ fun AppHeader(
                             tint = Color.White
                         )
                     }
-                    DropdownCategories(onCategorySelected = { category ->
-                        selectedCategory.value = category
-                    })
+                    MainDropdown(
+                        onCategorySelected = { category -> selectedCategory.value = category },
+                        sourceResponse = sourceResponse,
+                        onSourceSelected = { source -> sourceSelected.value = source }
+                    )
                 } else {
                     IconButton(onClick = { showSearch.value = false }) {
                         Icon(

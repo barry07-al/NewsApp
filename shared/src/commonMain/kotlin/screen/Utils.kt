@@ -3,7 +3,6 @@ package screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,21 +17,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,11 +42,65 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.seiko.imageloader.rememberImagePainter
 import dataclass.Article
-import dataclass.SourceData
 import repositories.FavouriteNewsRepository
-import repositories.NewsRepository
 import response.ArticleResponse
-import response.SourceResponse
+
+val countryNamesToCodes = mapOf(
+    "united arab emirates" to "ae",
+    "argentina" to "ar",
+    "austria" to "at",
+    "australia" to "au",
+    "belgium" to "be",
+    "bulgaria" to "bg",
+    "brazil" to "br",
+    "canada" to "ca",
+    "switzerland" to "ch",
+    "china" to "cn",
+    "colombia" to "co",
+    "czech republic" to "cz",
+    "germany" to "de",
+    "egypt" to "eg",
+    "france" to "fr",
+    "united kingdom" to "gb",
+    "greece" to "gr",
+    "hong kong" to "hk",
+    "hungary" to "hu",
+    "indonesia" to "id",
+    "ireland" to "ie",
+    "israel" to "il",
+    "india" to "in",
+    "italy" to "it",
+    "japan" to "jp",
+    "south korea" to "kr",
+    "lithuania" to "lt",
+    "latvia" to "lv",
+    "morocco" to "ma",
+    "mexico" to "mx",
+    "malaysia" to "my",
+    "nigeria" to "ng",
+    "netherlands" to "nl",
+    "norway" to "no",
+    "new zealand" to "nz",
+    "philippines" to "ph",
+    "poland" to "pl",
+    "portugal" to "pt",
+    "romania" to "ro",
+    "serbia" to "rs",
+    "russia" to "ru",
+    "saudi arabia" to "sa",
+    "sweden" to "se",
+    "singapore" to "sg",
+    "slovenia" to "si",
+    "slovakia" to "sk",
+    "thailand" to "th",
+    "turkey" to "tr",
+    "taiwan" to "tw",
+    "ukraine" to "ua",
+    "united states" to "us",
+    "venezuela" to "ve",
+    "south africa" to "za"
+)
+
 
 @Composable
 fun BodyContent(
@@ -65,7 +114,7 @@ fun BodyContent(
             .fillMaxSize()
             .background(color = Color.White),
     ) {
-        val filteredArticles = articles.filter { it.title != "[Removed]"}  // Filter out articles with no image
+        val filteredArticles = articles.filter { it.title != "[Removed]"}  // Filter out articles removed
         LazyColumn {
             items(filteredArticles) { article ->
                 ArticleCard(article, onSelectArticle, favouriteNewsRepository)
@@ -160,20 +209,19 @@ fun ArticleCard(
     }
 }
 @Composable
-fun FilterBySource(
-    sourceResponse: SourceResponse,
-    onsourceSelected: (SourceData) -> Unit
+fun FilterByCountry(
+    onCountrySelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedSource by remember { mutableStateOf<SourceData?>(null) }
+    var selectedCountryCode by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.wrapContentSize()) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
             Text(
-                text = "filter by source",
+                text = "filter by country",
                 style = MaterialTheme.typography.body2,
             )
             IconButton(onClick = { expanded = true }) {
@@ -189,34 +237,16 @@ fun FilterBySource(
             onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxWidth()
         ) {
-            var isSelected by remember { mutableStateOf(false) }
-            sourceResponse.sources.take(7).forEach { source ->
+            countryNamesToCodes.forEach { (countryName, countryCode) ->
                 DropdownMenuItem(onClick = {
-                    selectedSource  = source
-                    onsourceSelected(source)
+                    selectedCountryCode = countryCode
+                    onCountrySelected(countryCode)
                     expanded = false
                 }) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = source.name,
-                            style = MaterialTheme.typography.body2,
-                        )
-                        Checkbox(
-                            checked = selectedSource == source,
-                            onCheckedChange = {checked ->
-                                if (checked) {
-                                    selectedSource = source
-                                    expanded = false
-                                } else {
-                                    selectedSource = null
-                                }
-                                onsourceSelected(source)
-                            }
-                        )
-                    }
+                    Text(
+                        text = countryName.replaceFirstChar { it.uppercase() },
+                        style = MaterialTheme.typography.body2,
+                    )
                 }
             }
         }

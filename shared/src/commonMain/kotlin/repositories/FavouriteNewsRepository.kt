@@ -31,9 +31,7 @@ class FavouriteNewsRepository {
     }
 
     private fun updateFavouritesNews(){
-        coroutineScope.launch {
-            favouriteNewsResponse.update { getNewsFavourites()}
-        }
+        favouriteNewsResponse.update { getNewsFavourites()}
     }
 
     private fun getNewsFavourites() = mockDataSourceFavourites.getNewsFavourites()
