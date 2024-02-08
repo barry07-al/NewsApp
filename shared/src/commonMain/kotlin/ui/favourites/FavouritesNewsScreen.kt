@@ -1,4 +1,4 @@
-package screen
+package ui.favourites
 
 
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import dataclass.Article
 import repositories.FavouriteNewsRepository
 import response.ArticleResponse
+import ui.util.AppFooter
+import ui.util.BodyContent
 
 @Composable
 fun FavouritesResultsScreen(
@@ -50,7 +52,7 @@ fun FavouritesResultsScreen(
             )
         },
         bottomBar = {
-            AppFooter()
+            // AppFooter()
         }
     ) {innerPadding ->
         Column(

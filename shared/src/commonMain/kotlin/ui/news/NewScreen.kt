@@ -1,4 +1,4 @@
-package screen
+package ui.news
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
 import dataclass.Article
 import repositories.FavouriteNewsRepository
+import ui.util.AppFooter
 
 @Composable
 fun NewScreen(
@@ -107,7 +108,7 @@ fun NewBodyScreen(article: Article, favouriteNewsRepository: FavouriteNewsReposi
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { /* Implémentez la logique de partage ici */ }) {
+                    IconButton(onClick = { /* logique de partage ici */ }) {
                         Icon(Icons.Default.Share, contentDescription = "shared article")
                     }
                     IconButton(
@@ -158,24 +159,3 @@ fun ParallaxImage(url: String?) {
         )
     }
 }
-
-/**
-@Composable
-fun ArticleLinkText(articleText: String, articleUrl: String) {
-    val context = LocalContext.current
-
-    val annotatedText = buildAnnotatedString {
-        append(articleText)
-        withStyle(style = SpanStyle(color = Color.Blue, fontSize = 16.sp)) {
-            append(" lire la suite")
-        }
-    }
-
-    ClickableText(
-        text = annotatedText,
-        onClick = { offset ->
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl)))
-        }
-    )
-}
-*/

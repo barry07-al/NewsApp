@@ -1,4 +1,4 @@
-package screen
+package ui.favourites
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -15,7 +15,7 @@ fun FavouriteView(navigator: Navigator) {
     }) {
         Icon(
             Icons.Default.Favorite,
-            contentDescription = "Saved Articles",
+            contentDescription = "Favourites Articles",
             tint = Color.White
         )
     }

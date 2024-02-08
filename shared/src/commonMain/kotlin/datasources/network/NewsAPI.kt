@@ -12,7 +12,7 @@ import response.SourceResponse
 class NewsAPI {
 
     private val url = "https://newsapi.org/v2"
-    private val key = "b818431d7898460d9fd432b28b05a9d8"
+    private val key = "1b0c20c4af4547709826487983fff006" // "b818431d7898460d9fd432b28b05a9d8"
 
     private val httpClient = HttpClient {
         install(ContentNegotiation) {

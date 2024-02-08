@@ -1,4 +1,4 @@
-package screen
+package ui.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -38,7 +37,7 @@ fun SearchView(state: MutableState<TextFieldValue>, onSearchSubmit: (String) -> 
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
-                contentDescription = "",
+                contentDescription = "Icône de recherche à gauche du champ de recherche",
                 modifier = Modifier
                     .padding(15.dp)
                     .size(24.dp)
@@ -53,7 +52,7 @@ fun SearchView(state: MutableState<TextFieldValue>, onSearchSubmit: (String) -> 
                 ) {
                     Icon(
                         Icons.Default.Refresh,
-                        contentDescription = "",
+                        contentDescription = "icône de rafraîchissement à droite du champ de recherche",
                         modifier = Modifier
                             .padding(15.dp)
                             .size(24.dp)

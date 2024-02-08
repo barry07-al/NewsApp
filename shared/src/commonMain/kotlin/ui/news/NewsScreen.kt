@@ -1,4 +1,4 @@
-package screen
+package ui.news
 
 import dataclass.Article
 import response.ArticleResponse
@@ -14,6 +14,10 @@ import enumdata.NewsCategory
 import moe.tlaster.precompose.navigation.Navigator
 import repositories.FavouriteNewsRepository
 import response.SourceResponse
+import ui.util.AppHeader
+import ui.util.BodyContent
+import ui.util.FilterByCountry
+import ui.util.TitleComposable
 
 @Composable
 fun NewsScreen(
@@ -33,7 +37,7 @@ fun NewsScreen(
                 navigator, searchKeyword, selectedCategory, selectedSource, sourceResponse)
         },
         bottomBar = {
-            AppFooter()
+            // AppFooter()
         }
     ) {
         innerPadding ->

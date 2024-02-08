@@ -8,7 +8,10 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
 import repositories.FavouriteNewsRepository
 import repositories.NewsRepository
-import screen.*
+import ui.favourites.FavouritesResultsScreen
+import ui.news.NewScreen
+import ui.news.NewsScreen
+import ui.search.SearchResultsScreen
 
 
 val newsRepository = NewsRepository.getInstance()
@@ -27,6 +30,7 @@ fun Navigation() {
     LaunchedEffect(selectedCategory.value) {
         newsRepository.fetchTopHeadlines(selectedCategory.value.name.lowercase())
     }
+
 
     LaunchedEffect(Unit) {
         newsRepository.fetchSources()
@@ -57,22 +61,24 @@ fun Navigation() {
         scene(route = "/newsScreen") {
             val articleResponse = newsRepository.newsResponse.collectAsState().value
             if (articleResponse != null) {
-                NewsScreen(
-                    navigator = navigator,
-                    articleResponse = articleResponse,
-                    sourceResponse = newsRepository.sourceResponse.collectAsState().value ?: fakeSourceData(),
-                    onSelectArticle = { article ->
-                        selectedArticle.value = article
-                        navigator.navigate("/newScreen")
-                    },
-                    searchKeyword = searchKeyword,
-                    selectedCategory = selectedCategory,
-                    favouriteNewsRepository = favouritesRepository,
-                    selectedSource = selectedSource,
-                    onCountrySelected = { country ->
-                        selectedCountry.value = country
-                    }
-                )
+                newsRepository.sourceResponse.collectAsState().value?.let { it1 ->
+                    NewsScreen(
+                        navigator = navigator,
+                        articleResponse = articleResponse,
+                        sourceResponse = it1,
+                        onSelectArticle = { article ->
+                            selectedArticle.value = article
+                            navigator.navigate("/newScreen")
+                        },
+                        searchKeyword = searchKeyword,
+                        selectedCategory = selectedCategory,
+                        favouriteNewsRepository = favouritesRepository,
+                        selectedSource = selectedSource,
+                        onCountrySelected = { country ->
+                            selectedCountry.value = country
+                        }
+                    )
+                }
             }
         }
         scene(route = "/newScreen") {

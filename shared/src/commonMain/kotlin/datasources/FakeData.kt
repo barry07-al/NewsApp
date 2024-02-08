@@ -1,4 +1,4 @@
-package screen
+package datasources
 
 import dataclass.Article
 import dataclass.Source
@@ -7,7 +7,7 @@ import response.ArticleResponse
 import response.SourceResponse
 
 
-fun fakeData(): ArticleResponse {
+fun fakeArticleResponse(): ArticleResponse {
     val source = Source("example", "Example Source")
 
     val sampleArticles = listOf(
@@ -42,7 +42,7 @@ fun fakeData(): ArticleResponse {
     return ArticleResponse("ok", 2, sampleArticles)
 }
 
-fun fakeSourceData(): SourceResponse {
+fun fakeSourceResponse(): SourceResponse {
     val fakeSources = listOf(
         SourceData(
             id = "source-001",
@@ -91,5 +91,4 @@ fun fakeSourceData(): SourceResponse {
         )
     )
     return SourceResponse("ok", fakeSources);
-
 }

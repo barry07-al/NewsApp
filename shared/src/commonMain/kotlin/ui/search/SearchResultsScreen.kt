@@ -1,4 +1,4 @@
-package screen
+package ui.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dataclass.Article
 import repositories.FavouriteNewsRepository
-import repositories.NewsRepository
 import response.ArticleResponse
+import ui.util.BodyContent
+import ui.util.TitleComposable
 
 @Composable
 fun SearchResultsScreen(
@@ -51,7 +52,7 @@ fun SearchResultsScreen(
             )
         },
         bottomBar = {
-            AppFooter()
+            // AppFooter()
         }
     ) {innerPadding ->
         Column(

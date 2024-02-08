@@ -27,27 +27,22 @@ class NewsRepository {
     }
 
     suspend fun fetchTopHeadlines(category : String?) {
-        val response = category?.let { newsAPI.getTopHeadlines(it) }
-        _newsResponse.value = response
+        _newsResponse.value = category?.let { newsAPI.getTopHeadlines(it) }
     }
 
     suspend fun fetchEverything(query: String) {
-        val response = newsAPI.getEverything(query)
-        _searchResponse.value = response
+        _searchResponse.value = newsAPI.getEverything(query)
     }
 
     suspend fun fetchSources() {
-        val response = newsAPI.getSources()
-        _sourceResponse.value = response
+        _sourceResponse.value = newsAPI.getSources()
     }
 
     suspend fun fetchTopHeadlinesByCategoryAndCountry(category: String, countryCode: String) {
-        val response = newsAPI.getTopHeadlinesByCategoryAndCountry(category, countryCode)
-        _newsResponse.value = response
+        _newsResponse.value = newsAPI.getTopHeadlinesByCategoryAndCountry(category, countryCode)
     }
 
     suspend fun fetchTopHeadlinesBySource(sourceId: String) {
-        val response = newsAPI.getTopHeadlinesBySource(sourceId)
-        _newsResponse.value = response
+        _newsResponse.value = newsAPI.getTopHeadlinesBySource(sourceId)
     }
 }
